@@ -43,4 +43,14 @@ public class CartServiceImpl implements CartService {
             cartRepository.saveCart(cart);
         }
     }
+
+    /*
+    Added for test purposes only
+     */
+    public void addItemToCartNotSynchronized(long cartId, long productId, int quantityToAdd) {
+        Product product = productGateway.getProduct(productId).orElseThrow(ProductNotFound::new);
+        Cart cart = getCart(cartId);
+        cart.addItem(product, quantityToAdd);
+        cartRepository.saveCart(cart);
+    }
 }
