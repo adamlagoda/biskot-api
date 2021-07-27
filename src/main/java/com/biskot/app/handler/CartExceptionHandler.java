@@ -1,6 +1,10 @@
 package com.biskot.app.handler;
 
-import com.biskot.domain.exception.*;
+import com.biskot.domain.exception.business.MaximumCartValueExceeded;
+import com.biskot.domain.exception.business.MaximumNumberOfProductsExceeded;
+import com.biskot.domain.exception.business.StockAvailabilityExceeded;
+import com.biskot.domain.exception.generic.CartNotFound;
+import com.biskot.domain.exception.generic.ProductNotFound;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;

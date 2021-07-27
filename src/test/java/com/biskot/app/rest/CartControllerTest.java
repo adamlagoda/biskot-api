@@ -1,7 +1,7 @@
 package com.biskot.app.rest;
 
-import com.biskot.domain.exception.CartNotFound;
-import com.biskot.domain.exception.MaximumCartValueExceeded;
+import com.biskot.domain.exception.generic.CartNotFound;
+import com.biskot.domain.exception.business.MaximumCartValueExceeded;
 import com.biskot.domain.model.Cart;
 import com.biskot.domain.model.Product;
 import com.biskot.domain.service.CartService;

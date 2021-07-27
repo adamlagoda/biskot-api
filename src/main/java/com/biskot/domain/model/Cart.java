@@ -22,16 +22,14 @@ public class Cart {
             items = new HashMap<>();
         }
         long productId = productToAdd.getId();
-        synchronized (this) {
-            items.compute(productId, (k, v) -> {
-                if (v != null) {
-                    v.setQuantity(v.getQuantity() + quantity);
-                } else {
-                    v = Item.of(productToAdd);
-                }
-                return v;
-            });
-        }
+        items.compute(productId, (k, v) -> {
+            if (v != null) {
+                v.setQuantity(v.getQuantity() + quantity);
+            } else {
+                v = Item.of(productToAdd);
+            }
+            return v;
+        });
     }
 
     /**

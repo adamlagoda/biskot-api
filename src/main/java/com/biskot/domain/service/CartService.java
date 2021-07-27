@@ -1,6 +1,6 @@
 package com.biskot.domain.service;
 
-import com.biskot.domain.exception.MaximumCartValueExceeded;
+import com.biskot.domain.exception.business.MaximumCartValueExceeded;
 import com.biskot.domain.model.Cart;
 
 public interface CartService {

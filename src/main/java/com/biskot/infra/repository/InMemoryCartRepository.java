@@ -2,9 +2,11 @@ package com.biskot.infra.repository;
 
 import com.biskot.domain.model.Cart;
 import com.biskot.domain.spi.CartPersistencePort;
+import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
+@Repository
 public class InMemoryCartRepository implements CartPersistencePort {
 
     @Override

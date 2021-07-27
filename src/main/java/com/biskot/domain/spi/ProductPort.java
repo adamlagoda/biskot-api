@@ -2,8 +2,10 @@ package com.biskot.domain.spi;
 
 import com.biskot.domain.model.Product;
 
+import java.util.Optional;
+
 public interface ProductPort {
 
-    Product getProduct(long productId);
+    Optional<Product> getProduct(long productId);
 
 }
