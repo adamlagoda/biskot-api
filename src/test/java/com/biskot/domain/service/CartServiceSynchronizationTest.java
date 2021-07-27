@@ -1,5 +1,6 @@
 package com.biskot.domain.service;
 
+import com.biskot.domain.businessrules.CartBusinessRulesValidationService;
 import com.biskot.domain.factory.CartFactory;
 import com.biskot.domain.model.Cart;
 import com.biskot.domain.spi.CartPersistencePort;
@@ -9,7 +10,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.Optional;
@@ -33,8 +33,11 @@ class CartServiceSynchronizationTest {
     @MockBean
     private ProductPort productGateway;
 
-    @SpyBean
+    @MockBean
     private CartFactory cartFactory;
+
+    @MockBean
+    private CartBusinessRulesValidationService validationService;
 
     @Autowired
     private CartService service;
@@ -46,7 +49,7 @@ class CartServiceSynchronizationTest {
     public void shouldSynchronizeAccessToCart() throws InterruptedException {
         //given
         ExecutorService executor = Executors.newFixedThreadPool(NUM_THREADS);
-        Cart mockedCart = new Cart(CART_ID);
+        Cart mockedCart = Cart.of(CART_ID);
         given(productGateway.getProduct(PRODUCT_ID)).willReturn(Optional.of(PRODUCT));
         given(cartRepository.getCart(CART_ID)).willReturn(Optional.of(mockedCart));
         willDoNothing().given(cartRepository).saveCart(CART);
@@ -64,15 +67,14 @@ class CartServiceSynchronizationTest {
         assertThat(mockedCart.getItems())
                 .hasSize(1)
                 .element(0)
-                .matches(item -> item.getQuantity() == NUM_ITERATIONS * NUM_THREADS
-                        && item.getProduct().equals(PRODUCT));
+                .matches(item -> item.getQuantity() == NUM_ITERATIONS * NUM_THREADS);
     }
 
     @Test
     public void shouldNotSynchronizeAccessToCart() throws InterruptedException {
         //given
         ExecutorService executor = Executors.newFixedThreadPool(NUM_THREADS);
-        Cart mockedCart = new Cart(CART_ID);
+        Cart mockedCart = Cart.of(CART_ID);
         given(productGateway.getProduct(PRODUCT_ID)).willReturn(Optional.of(PRODUCT));
         given(cartRepository.getCart(CART_ID)).willReturn(Optional.of(mockedCart));
         willDoNothing().given(cartRepository).saveCart(CART);

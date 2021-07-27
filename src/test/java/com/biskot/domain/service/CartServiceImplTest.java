@@ -1,5 +1,6 @@
 package com.biskot.domain.service;
 
+import com.biskot.domain.businessrules.CartBusinessRulesValidationService;
 import com.biskot.domain.exception.generic.CartNotFound;
 import com.biskot.domain.exception.generic.ProductNotFound;
 import com.biskot.domain.factory.CartFactory;
@@ -35,6 +36,9 @@ class CartServiceImplTest {
 
     @MockBean
     private CartFactory cartFactory;
+
+    @MockBean
+    private CartBusinessRulesValidationService validationService;
 
     @Autowired
     private CartService service;
@@ -77,7 +81,7 @@ class CartServiceImplTest {
     @Test
     public void shouldAddItemToCart() {
         //given
-        Cart mockedCart = new Cart(CART_ID);
+        Cart mockedCart = Cart.of(CART_ID);
         given(productGateway.getProduct(PRODUCT_ID)).willReturn(Optional.of(PRODUCT));
         given(cartRepository.getCart(CART_ID)).willReturn(Optional.of(mockedCart));
         willDoNothing().given(cartRepository).saveCart(CART);
@@ -113,7 +117,7 @@ class CartServiceImplTest {
         static final Cart CART = createCart();
 
         private static Cart createCart() {
-            Cart cart = new Cart(CART_ID);
+            Cart cart = Cart.of(CART_ID);
             cart.addItem(PRODUCT, 1);
             return cart;
         }

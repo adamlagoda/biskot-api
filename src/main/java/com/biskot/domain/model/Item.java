@@ -23,7 +23,11 @@ public class Item {
     }
 
     public static Item fromEntity(ItemEntity itemEntity) {
-        Product product = Product.of(itemEntity.getId(), itemEntity.getLabel(), itemEntity.getUnitPrice());
+        Product product = Product.of(
+                itemEntity.getId(),
+                itemEntity.getLabel(),
+                itemEntity.getUnitPrice()
+        );
         return new Item(product, itemEntity.getQuantity());
     }
 }

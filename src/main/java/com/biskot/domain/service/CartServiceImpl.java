@@ -1,5 +1,6 @@
 package com.biskot.domain.service;
 
+import com.biskot.domain.businessrules.CartBusinessRulesValidationService;
 import com.biskot.domain.exception.generic.CartNotFound;
 import com.biskot.domain.exception.generic.ProductNotFound;
 import com.biskot.domain.factory.CartFactory;
@@ -22,6 +23,9 @@ public class CartServiceImpl implements CartService {
     @Autowired
     private CartFactory cartFactory;
 
+    @Autowired
+    private CartBusinessRulesValidationService cartValidationService;
+
     @Override
     public long createCart() {
         Cart cart = cartFactory.create();
@@ -40,6 +44,7 @@ public class CartServiceImpl implements CartService {
         synchronized (this) {
             Cart cart = getCart(cartId);
             cart.addItem(product, quantityToAdd);
+            cartValidationService.validate(cart);
             cartRepository.saveCart(cart);
         }
     }

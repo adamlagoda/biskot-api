@@ -117,7 +117,7 @@ class CartControllerTest {
         static final Cart CART = createCart();
 
         private static Cart createCart() {
-            Cart cart = new Cart(CART_ID);
+            Cart cart = Cart.of(CART_ID);
             cart.addItem(PRODUCT, 1);
             return cart;
         }

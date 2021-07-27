@@ -1,7 +1,10 @@
 package com.biskot.domain.model;
 
 import com.biskot.infra.repository.entity.CartEntity;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
 import java.math.BigDecimal;
 import java.util.HashMap;
@@ -10,30 +13,26 @@ import java.util.Map;
 import java.util.function.Function;
 
 import static java.util.stream.Collectors.toMap;
-import static org.springframework.util.CollectionUtils.isEmpty;
 
-@RequiredArgsConstructor
-@AllArgsConstructor(staticName = "of")
+@RequiredArgsConstructor(staticName = "of")
 @EqualsAndHashCode
 public class Cart {
 
     @Getter
     private final long id;
-    private Map<Long, Item> items;
+    private final Map<Long, Item> items;
 
     public void addItem(Product productToAdd, int quantity) {
-        if (isEmpty(items)) {
-            items = new HashMap<>();
-        }
         long productId = productToAdd.getId();
-        items.compute(productId, (k, v) -> {
-            if (v != null) {
-                v.setQuantity(v.getQuantity() + quantity);
-            } else {
-                v = Item.of(productToAdd);
-            }
-            return v;
-        });
+        var item = items.get(productId);
+        if (item != null) {
+            int updatedQuantity = item.getQuantity() + quantity;
+            item.setQuantity(updatedQuantity);
+        } else {
+            item = Item.of(productToAdd);
+            item.setQuantity(quantity);
+            items.put(productId, item);
+        }
     }
 
     /**
@@ -53,10 +52,13 @@ public class Cart {
     }
 
     public static Cart fromEntity(CartEntity cartEntity) {
-        Cart cart = new Cart(cartEntity.getId());
-        cart.items = cartEntity.getItems().stream()
+        Map<Long, Item> items = cartEntity.getItems().stream()
                 .map(Item::fromEntity)
                 .collect(toMap(item -> item.getProduct().getId(), Function.identity()));
-        return cart;
+        return Cart.of(cartEntity.getId(), items);
+    }
+
+    public static Cart of(long cartId) {
+        return of(cartId, new HashMap<>());
     }
 }
