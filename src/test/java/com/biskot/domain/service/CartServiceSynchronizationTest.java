@@ -1,5 +1,6 @@
 package com.biskot.domain.service;
 
+import com.biskot.domain.factory.CartFactory;
 import com.biskot.domain.model.Cart;
 import com.biskot.domain.spi.CartPersistencePort;
 import com.biskot.domain.spi.ProductPort;
@@ -8,6 +9,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.Optional;
@@ -30,6 +32,9 @@ class CartServiceSynchronizationTest {
 
     @MockBean
     private ProductPort productGateway;
+
+    @SpyBean
+    private CartFactory cartFactory;
 
     @Autowired
     private CartService service;

@@ -109,7 +109,7 @@ class CartServiceImplTest {
         static final long PRODUCT_ID = 10L;
         static final String LABEL = "test product";
         static final BigDecimal PRICE = BigDecimal.ONE;
-        static final Product PRODUCT = new Product(PRODUCT_ID, LABEL, PRICE);
+        static final Product PRODUCT = Product.of(PRODUCT_ID, LABEL, PRICE);
         static final Cart CART = createCart();
 
         private static Cart createCart() {

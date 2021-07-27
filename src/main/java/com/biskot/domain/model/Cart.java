@@ -1,16 +1,20 @@
 package com.biskot.domain.model;
 
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import com.biskot.infra.repository.entity.CartEntity;
+import lombok.*;
 
 import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 
+import static java.util.stream.Collectors.toMap;
 import static org.springframework.util.CollectionUtils.isEmpty;
 
 @RequiredArgsConstructor
+@AllArgsConstructor(staticName = "of")
+@EqualsAndHashCode
 public class Cart {
 
     @Getter
@@ -46,5 +50,13 @@ public class Cart {
                 .reduce(BigDecimal.ZERO,
                         (accumulator, item) -> accumulator.add(item.getLinePrice()),
                         BigDecimal::add);
+    }
+
+    public static Cart fromEntity(CartEntity cartEntity) {
+        Cart cart = new Cart(cartEntity.getId());
+        cart.items = cartEntity.getItems().stream()
+                .map(Item::fromEntity)
+                .collect(toMap(item -> item.getProduct().getId(), Function.identity()));
+        return cart;
     }
 }

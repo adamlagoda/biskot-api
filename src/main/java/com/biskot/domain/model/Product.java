@@ -1,14 +1,20 @@
 package com.biskot.domain.model;
 
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import com.biskot.infra.gateway.payload.ProductResponse;
+import lombok.Value;
 
 import java.math.BigDecimal;
 
-@Getter
-@RequiredArgsConstructor
+@Value(staticConstructor = "of")
 public class Product {
-    private final long id;
-    private final String label;
-    private final BigDecimal price;
+    long id;
+    String label;
+    BigDecimal price;
+
+    public static Product fromResponse(ProductResponse productResponse) {
+        return new Product(
+                productResponse.getId(),
+                productResponse.getLabel(),
+                BigDecimal.valueOf(productResponse.getUnitPrice()));
+    }
 }
